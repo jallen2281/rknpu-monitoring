@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: rknpu-exporter
+  namespace: monitoring
+  labels:
+    app: rknpu-exporter
+spec:
+  selector:
+    matchLabels:
+      name: rknpu-exporter
+  template:
+    metadata:
+      labels:
+        name: rknpu-exporter
+    spec:
+      # This allows the pod to pull your private image from GHCR
+      imagePullSecrets:
+        - name: ghcr-secret 
+      containers:
+      - name: exporter
+        image: ghcr.io/jallen2281/rknpu-monitoring:latest # Ensure this matches your GHCR path
+        ports:
+        - name: metrics
+          containerPort: 9101
+        securityContext:
+          privileged: true # Required to read hardware stats like NPU load and CMA
+        volumeMounts:
+        - name: sys-devfreq
+          mountPath: /sys/class/devfreq
+          readOnly: true
+        - name: proc-mem
+          mountPath: /proc/meminfo
+          readOnly: true
+      volumes:
+      - name: sys-devfreq
+        hostPath:
+          path: /sys/class/devfreq
+      - name: proc-mem
+        hostPath:
+          path: /proc/meminfo

@@ -1,0 +1,15 @@
+apiVersion: ://monitoring.coreos.com
+kind: ServiceMonitor
+metadata:
+  name: rknpu-monitor
+  namespace: monitoring
+  labels:
+    # Check your prometheus label! Run: kubectl get prometheus -n monitoring --show-labels
+    release: prometheus 
+spec:
+  selector:
+    matchLabels:
+      app: rknpu-exporter
+  endpoints:
+  - port: metrics
+    interval: 10s
