@@ -2,14 +2,16 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: rknpu-monitor
-  namespace: monitoring
+  namespace: observability  # <--- Put the Monitor where Prometheus lives
   labels:
-    # Check your prometheus label! Run: kubectl get prometheus -n monitoring --show-labels
-    release: prometheus 
+    release: prometheus
 spec:
+  namespaceSelector:
+    matchNames:
+      - monitoring        # <--- Tell it to look in your custom namespace
   selector:
     matchLabels:
-      app: rknpu-exporter
+      app: rknpu-exporter # Matches the Service in the 'monitoring' namespace
   endpoints:
   - port: metrics
     interval: 10s
