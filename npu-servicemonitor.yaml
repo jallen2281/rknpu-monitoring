@@ -4,7 +4,7 @@ metadata:
   name: rknpu-monitor
   namespace: observability  # <--- Put the Monitor where Prometheus lives
   labels:
-    release: prometheus
+    release: kube-prom-stack
 spec:
   namespaceSelector:
     matchNames:
