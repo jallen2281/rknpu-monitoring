@@ -3,18 +3,26 @@ kind: DaemonSet
 metadata:
   name: rknpu-exporter
   namespace: monitoring
-  labels:
-    app: rknpu-exporter
 spec:
+  selector:
+    matchLabels:
+      name: rknpu-exporter # <--- THIS MUST MATCH...
   template:
+    metadata:
+      labels:
+        name: rknpu-exporter # <--- ...THIS EXACTLY
     spec:
+      nodeSelector:
+        hardware: npu
+      imagePullSecrets:
+        - name: ghcr-secret
       containers:
       - name: exporter
         image: ghcr.io/jallen2281/rknpu-monitoring:latest
         securityContext:
           privileged: true
         volumeMounts:
-        - name: sys-kernel-debug  # <--- ADD THIS
+        - name: sys-kernel-debug
           mountPath: /sys/kernel/debug
           readOnly: true
         - name: sys-devfreq
@@ -24,7 +32,7 @@ spec:
           mountPath: /proc/meminfo
           readOnly: true
       volumes:
-      - name: sys-kernel-debug    # <--- ADD THIS
+      - name: sys-kernel-debug
         hostPath:
           path: /sys/kernel/debug
       - name: sys-devfreq
