@@ -14,7 +14,6 @@ data:
       "graphTooltip": 0,
       "id": null,
       "links": [],
-      "liveNow": false,
       "panels": [
         {
           "title": "NPU Core Utilization (Real-time)",
@@ -22,7 +21,7 @@ data:
           "gridPos": { "h": 8, "w": 24, "x": 0, "y": 0 },
           "targets": [
             {
-              "expr": "rockchip_npu_load",
+              "expr": "rknpu_load_percent",
               "legendFormat": "{{core}}",
               "refId": "A"
             }
@@ -49,7 +48,7 @@ data:
           "gridPos": { "h": 8, "w": 24, "x": 0, "y": 8 },
           "targets": [
             {
-              "expr": "rockchip_npu_load",
+              "expr": "rknpu_load_percent",
               "legendFormat": "{{node}} - {{core}}",
               "refId": "A"
             }
