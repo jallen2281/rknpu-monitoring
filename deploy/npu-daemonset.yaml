@@ -6,28 +6,17 @@ metadata:
   labels:
     app: rknpu-exporter
 spec:
-  selector:
-    matchLabels:
-      name: rknpu-exporter
   template:
-    metadata:
-      labels:
-        name: rknpu-exporter
     spec:
-      nodeSelector:
-        hardware: npu
-      # This allows the pod to pull your private image from GHCR
-      imagePullSecrets:
-        - name: ghcr-secret 
       containers:
       - name: exporter
-        image: ghcr.io/jallen2281/rknpu-monitoring:latest # Ensure this matches your GHCR path
-        ports:
-        - name: metrics
-          containerPort: 9101
+        image: ghcr.io/jallen2281/rknpu-monitoring:latest
         securityContext:
-          privileged: true # Required to read hardware stats like NPU load and CMA
+          privileged: true
         volumeMounts:
+        - name: sys-kernel-debug  # <--- ADD THIS
+          mountPath: /sys/kernel/debug
+          readOnly: true
         - name: sys-devfreq
           mountPath: /sys/class/devfreq
           readOnly: true
@@ -35,9 +24,13 @@ spec:
           mountPath: /proc/meminfo
           readOnly: true
       volumes:
+      - name: sys-kernel-debug    # <--- ADD THIS
+        hostPath:
+          path: /sys/kernel/debug
       - name: sys-devfreq
         hostPath:
           path: /sys/class/devfreq
       - name: proc-mem
         hostPath:
           path: /proc/meminfo
+
