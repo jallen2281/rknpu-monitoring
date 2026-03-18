@@ -12,6 +12,8 @@ spec:
       labels:
         name: rknpu-exporter # <--- ...THIS EXACTLY
     spec:
+      hostPID: true      # <--- ADD THIS (Critical for NPU driver stats)
+      hostNetwork: true
       nodeSelector:
         hardware: npu
       imagePullSecrets:
