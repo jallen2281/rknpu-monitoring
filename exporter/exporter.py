@@ -27,13 +27,13 @@ def get_npu_metrics():
     """Scrapes the RK3588 devfreq filesystem."""
     try:
         # Load is stored as 'XX@YYYYYYYY' (load@freq)
-        if os.path.exists('/sys/class/devfreq/fb000000.npu/load'):
-            with open('/sys/class/devfreq/fb000000.npu/load', 'r') as f:
+        if os.path.exists('/sys/class/devfreq/fdab0000.npu/load'):
+            with open('/sys/class/devfreq/fdab0000.npu/load', 'r') as f:
                 load_val = f.read().split('@')[0]
                 NPU_LOAD.set(int(load_val))
         
-        if os.path.exists('/sys/class/devfreq/fb000000.npu/cur_freq'):
-            with open('/sys/class/devfreq/fb000000.npu/cur_freq', 'r') as f:
+        if os.path.exists('/sys/class/devfreq/fdab0000.npu/cur_freq'):
+            with open('/sys/class/devfreq/fdab0000.npu/cur_freq', 'r') as f:
                 NPU_FREQ.set(int(f.read().strip()))
     except Exception as e:
         print(f"Error reading NPU hardware stats: {e}")
